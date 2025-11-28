@@ -1,0 +1,50 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Dashboard - Web Node_ETH</title>
+<style>
+body{margin:0;font-family:Arial,sans-serif;background:#f5f7fa;}
+header{background:#0d47a1;color:white;padding:20px;text-align:center;font-size:24px;}
+.container{max-width:900px;margin:30px auto;padding:20px;background:white;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,0.1);}
+h2{color:#0d47a1;margin-top:0;}
+.section{margin-bottom:25px;}
+button{padding:10px 14px;background:#0d47a1;color:white;border:none;border-radius:6px;cursor:pointer;}
+button:hover{background:#09357a;}
+</style>
+<script>
+function loadUser(){
+const user=JSON.parse(localStorage.getItem("wn_current_user")||"null");
+if(!user){window.location.href="login.html";return;}
+document.getElementById("name").innerText=user.name;
+document.getElementById("email").innerText=user.email;
+document.getElementById("phone").innerText=user.phone||'-';
+document.getElementById("plan").innerText=user.plan;
+}
+function logout(){localStorage.removeItem("wn_current_user");window.location.href="login.html";}
+function downloadCard(){
+const user=JSON.parse(localStorage.getItem("wn_current_user")||"{}");
+const content=`Web Node_ETH E-Business Card
+Name: ${user.name}
+Email: ${user.email}
+Phone: ${user.phone||'-'}
+Plan: ${user.plan}`;
+const blob=new Blob([content],{type:'text/plain'});
+const a=document.createElement('a');
+a.href=URL.createObjectURL(blob);
+a.download=`${user.name}_card.txt`;
+a.click();
+}
+</script>
+</head>
+<body onload="loadUser()">
+<header>User Dashboard</header>
+<div class="container">
+<h2>Welcome, <span id="name"></span></h2>
+<div class="section"><strong>Email:</strong> <span id="email"></span><br><strong>Phone:</strong> <span id="phone"></span><br><strong>Subscription Plan:</strong> <span id="plan"></span></div>
+<div class="section"><button onclick="downloadCard()">Download E-Business Card</button><button onclick="logout()" style="margin-left:10px;">Logout</button></div>
+</div>
+</body>
+</html>

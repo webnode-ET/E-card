@@ -1,0 +1,67 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Registration - Web Node_ETH</title>
+<style>
+body{margin:0;font-family:Arial,sans-serif;background:#e3f2fd;display:flex;justify-content:center;align-items:center;min-height:100vh;}
+.container{background:white;padding:35px;width:350px;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,0.15);}
+h2{text-align:center;color:#0d47a1;margin-bottom:25px;}
+label{font-size:14px;font-weight:bold;display:block;margin-bottom:5px;color:#333;}
+input,select{width:100%;padding:12px;margin-bottom:18px;border-radius:6px;border:1px solid #aaa;font-size:14px;}
+button{width:100%;padding:12px;background:#0d47a1;color:white;border:none;border-radius:6px;cursor:pointer;font-size:16px;}
+button:hover{background:#09357a;}
+.message{text-align:center;margin-bottom:15px;color:red;display:none;}
+.footer{margin-top:15px;text-align:center;font-size:13px;}
+.footer a{text-decoration:none;color:#0d47a1;}
+</style>
+<script>
+function registerUser(){
+const name=document.getElementById("name").value.trim();
+const email=document.getElementById("email").value.trim();
+const phone=document.getElementById("phone").value.trim();
+const pass=document.getElementById("password").value;
+const confirm=document.getElementById("confirm").value;
+const plan=document.getElementById("plan").value;
+const msg=document.getElementById("message");
+if(!name||!email||!pass||!confirm){msg.style.display="block";msg.innerText="Please fill all required fields!";return;}
+if(pass!==confirm){msg.style.display="block";msg.innerText="Passwords do not match!";return;}
+let users=JSON.parse(localStorage.getItem("wn_users")||"[]");
+if(users.some(u=>u.email===email)){msg.style.display="block";msg.innerText="Email already registered!";return;}
+const newUser={name:name,email:email,phone:phone,password:pass,plan:plan,active:false};
+users.push(newUser);
+localStorage.setItem("wn_users",JSON.stringify(users));
+msg.style.color="green";msg.style.display="block";msg.innerText="Registration successful! Please wait for admin approval.";
+document.getElementById("registrationForm").reset();
+}
+</script>
+</head>
+<body>
+<div class="container">
+<h2>User Registration</h2>
+<div id="message" class="message"></div>
+<form id="registrationForm" onsubmit="event.preventDefault(); registerUser();">
+<label>Full Name</label>
+<input type="text" id="name" placeholder="Your full name" required>
+<label>Email</label>
+<input type="email" id="email" placeholder="Your email" required>
+<label>Phone (optional)</label>
+<input type="text" id="phone" placeholder="Your phone number">
+<label>Password</label>
+<input type="password" id="password" placeholder="Enter password" required>
+<label>Confirm Password</label>
+<input type="password" id="confirm" placeholder="Confirm password" required>
+<label>Subscription Plan</label>
+<select id="plan">
+<option value="Free">Free</option>
+<option value="Standard">Standard - 250 birr/month</option>
+<option value="Premium">Premium - 500 birr/month</option>
+</select>
+<button type="submit">Register</button>
+</form>
+<div class="footer"><a href="index.html">← Back to Website</a></div>
+</div>
+</body>
+</html>
